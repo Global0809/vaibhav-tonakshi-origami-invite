@@ -1,0 +1,26 @@
+3d-world-source/node_modules/
+3d-world-source/dist/
+3d-world-source/dist-single/
+.DS_Store
+Thumbs.db
+.playwright-cli/
+.impeccable/review/
+
+# Publish only the guest-facing invitation; keep workspace history private.
+/.impeccable/
+/3d-world-source/
+/AGENTS.md
+/DESIGN.md
+/PRODUCT.md
+/PROJECT-NOTES.md
+/QA-NOTES.md
+/RSVP-SETUP.md
+/assets/*/PROVENANCE.md
+/assets/frames/
+/assets/film/film1.mp4
+/assets/film/film2.mp4
+/assets/stills/couple.webp
+/assets/stills/ganesha.webp
+/assets/stills/varmala.webp
+/.env*
+/*.pem

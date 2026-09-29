@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1a0a1e" />
+    <title>Vaibhav weds Tonakshi</title>
+    <style>
+      :root {
+        --gold: #e9c46a;
+        --gold-bright: #ffd97a;
+        --burgundy: #4a0e18;
+        --ink: #1a0a12;
+        --ui-font: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 100%; height: 100%; overflow: hidden; background: #0a0512;
+        overscroll-behavior: none; font-family: var(--ui-font);
+        -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+      }
+      #root { position: fixed; inset: 0; }
+      canvas { display: block; touch-action: none; }
+
+      /* Local fonts only: Chalkboard is the Apple fallback when Comic Sans is absent. */
+      button, .serif { font-family: var(--ui-font); }
+      .glass {
+        border: 1px solid rgba(255,255,255,0.28);
+        background:
+          linear-gradient(145deg, rgba(255,255,255,0.17), rgba(255,255,255,0.035) 52%),
+          rgba(47,12,27,0.42);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,0.34),
+          inset 0 -1px 0 rgba(255,195,112,0.11),
+          0 10px 30px rgba(13,3,12,0.28);
+        backdrop-filter: blur(14px) saturate(135%);
+        -webkit-backdrop-filter: blur(14px) saturate(135%);
+      }
+      @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+        .glass { background: rgba(47,12,27,0.84); }
+      }
+
+      /* ---- Loading veil ---- */
+      #loading {
+        position: fixed; inset: 0; z-index: 30;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 22px;
+        background: radial-gradient(ellipse at 50% 60%, #2a1020 0%, #14060f 70%, #0a0512 100%);
+        transition: opacity 1.1s ease;
+      }
+      #loading.hidden { opacity: 0; pointer-events: none; }
+      .diya-ring {
+        width: 58px; height: 58px; border-radius: 50%;
+        border: 2px solid rgba(233,196,106,0.18);
+        border-top-color: var(--gold-bright);
+        animation: spin 1.1s linear infinite;
+        box-shadow: 0 0 24px rgba(255,180,90,0.25);
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      #loading .msg {
+        padding: 10px 16px; border-radius: 999px;
+        color: #fff1cf; letter-spacing: .04em; font-size: 14px; opacity: 1;
+      }
+
+      /* ---- Title card ---- */
+      #titlecard {
+        position: fixed; left: 50%; right: auto; top: 6%; z-index: 20;
+        width: min(520px, calc(100vw - 40px)); border-radius: 28px;
+        display: flex; flex-direction: column; align-items: center; text-align: center;
+        pointer-events: none; padding: 14px 24px 15px;
+        transform: translateX(-50%);
+        transition: opacity 1.6s ease, transform 1.6s ease;
+      }
+      #titlecard.gone { opacity: 0; transform: translate(-50%, -12px) scale(.98); }
+      #titlecard .om { color: var(--gold-bright); font-size: 13px; letter-spacing: .08em; opacity: 0.94;
+        text-shadow: 0 0 16px rgba(255,190,90,0.42); }
+      #titlecard h1 {
+        color: #fff8ec; font-weight: 700; font-size: clamp(30px, 5vw, 54px);
+        letter-spacing: .01em; line-height: 1.06; margin: 5px 0 3px;
+        text-shadow: 0 2px 24px rgba(0,0,0,0.48), 0 0 32px rgba(255,180,90,0.2);
+      }
+      #titlecard .weds { font-size: .56em; opacity: .82; font-style: italic; font-weight: 400; }
+      #titlecard .rule {
+        display: flex; align-items: center; gap: 10px; margin: 5px 0; opacity: 0.9;
+      }
+      #titlecard .rule span { height: 1px; width: min(76px, 19vw);
+        background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+      #titlecard .rule b { color: var(--gold); font-size: 14px; font-weight: 400; }
+      #titlecard .sub { color: #f3d590; font-size: clamp(12px, 2vw, 14px);
+        letter-spacing: .08em; opacity: 0.92; }
+
+      /* ---- Desktop hint + mobile auto-dismiss tips ---- */
+      #hint {
+        position: fixed; left: 50%; right: auto; bottom: 22px; z-index: 20;
+        width: max-content; max-width: calc(100vw - 36px); padding: 9px 14px; border-radius: 999px;
+        color: rgba(255,244,224,0.84); font-size: 12px; line-height: 1.35;
+        letter-spacing: .015em; text-align: center; pointer-events: none;
+        transform: translateX(-50%); transition: opacity .55s ease, transform .55s ease;
+      }
+      #hint.gone { opacity: 0; transform: translate(-50%, 6px); }
+      #interactionTip {
+        position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 76px); z-index: 24;
+        display: none; align-items: center; justify-content: center; gap: 8px;
+        max-width: min(310px, calc(100vw - 34px)); padding: 10px 14px; border-radius: 999px;
+        color: rgba(255,248,235,.95); font-size: 12px; line-height: 1.3; text-align: center;
+        pointer-events: none; opacity: 0; transform: translate(-50%, 8px) scale(.98);
+        transition: opacity .32s ease, transform .32s ease;
+      }
+      #interactionTip.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
+      #interactionTip .tip-mark { flex: 0 0 auto; color: var(--gold-bright); font-size: 11px; }
+
+      /* ---- Arrival beat ---- */
+      #arrivalMoment {
+        position: fixed; left: 50%; top: 16%; z-index: 22;
+        width: min(460px, calc(100vw - 36px)); padding: 13px 22px 15px; border-radius: 25px;
+        text-align: center; pointer-events: none;
+        color: #fff8ec;
+        opacity: 0; transform: translate(-50%, -12px) scale(0.96);
+        transition: opacity 0.65s ease, transform 0.65s ease;
+      }
+      #arrivalMoment.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
+      #arrivalMoment .eyebrow { color: #f3d590; font-size: 12px; letter-spacing: .04em; }
+      #arrivalMoment .arrival-title { margin-top: 3px; font-size: clamp(24px, 4vw, 36px); font-weight: 700; letter-spacing: .01em; }
+
+      /* ---- Sound + one unobtrusive mobile follow control ---- */
+      #soundBtn {
+        position: fixed; top: calc(env(safe-area-inset-top) + 14px); right: calc(env(safe-area-inset-right) + 14px);
+        z-index: 25; width: 44px; height: 44px; border-radius: 50%;
+        color: var(--gold-bright); font-size: 19px; cursor: pointer; touch-action: manipulation; line-height: 1;
+        transition: transform .18s ease, background .18s ease;
+      }
+      #followBtn {
+        display: none; align-items: center; justify-content: center; gap: 7px;
+        color: #fff8eb; font: 700 13px/1 var(--ui-font); letter-spacing: .01em;
+        touch-action: manipulation; user-select: none; -webkit-user-select: none;
+      }
+      #followBtn::before { content: "\2726"; color: var(--gold-bright); font-size: 11px; }
+      #soundBtn:active { transform: scale(.96); background: rgba(124,33,46,.7); }
+      #soundBtn:focus-visible, #followBtn:focus-visible {
+        outline: 3px solid rgba(255,217,122,0.9); outline-offset: 3px;
+      }
+
+      @media (max-width: 900px), (pointer: coarse) {
+        .glass {
+          backdrop-filter: blur(8px) saturate(120%);
+          -webkit-backdrop-filter: blur(8px) saturate(120%);
+        }
+        #titlecard {
+          top: calc(env(safe-area-inset-top) + 10px); width: calc(100vw - 28px);
+          max-width: 430px; padding: 11px 15px 12px; border-radius: 23px;
+        }
+        #titlecard h1 {
+          font-size: clamp(24px, 7vw, 34px); letter-spacing: .005em;
+          white-space: nowrap;
+        }
+        #titlecard .om { font-size: 12px; }
+        #titlecard .sub { font-size: 12px; }
+        #hint { display: none; }
+        #interactionTip { display: flex; }
+        #arrivalMoment { top: calc(env(safe-area-inset-top) + 84px); padding: 11px 16px 13px; }
+        #soundBtn { width: 46px; height: 46px; }
+        #followBtn {
+          display: flex; position: fixed;
+          right: calc(env(safe-area-inset-right) + 14px);
+          bottom: calc(env(safe-area-inset-bottom) + 14px);
+          z-index: 25; min-width: 132px; min-height: 44px; padding: 0 15px; border-radius: 999px;
+          visibility: hidden; opacity: 0; pointer-events: none; transform: translateY(8px);
+          transition: opacity 0.25s ease, transform 0.25s ease, background 0.15s ease;
+        }
+        #followBtn.show { visibility: visible; opacity: 1; pointer-events: auto; transform: translateY(0); }
+        #followBtn.show:active { transform: translateY(0) scale(.97); }
+      }
+
+      @media (max-height: 430px) and (orientation: landscape) {
+        #hint { display: none; }
+        #interactionTip { bottom: calc(env(safe-area-inset-bottom) + 62px); }
+        #arrivalMoment { top: 7%; padding: 8px 14px 10px; }
+        #soundBtn { width: 44px; height: 44px; }
+        #followBtn { right: calc(env(safe-area-inset-right) + 8px); bottom: calc(env(safe-area-inset-bottom) + 8px); min-height: 44px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .diya-ring { animation: none !important; }
+        #loading, #titlecard, #hint, #interactionTip, #arrivalMoment, #soundBtn, #followBtn {
+          transition-duration: .01ms !important;
+        }
+      }
+
+      /* ---- Vignette for cinematic framing ---- */
+      #vignette {
+        position: fixed; inset: 0; z-index: 10; pointer-events: none;
+        box-shadow: inset 0 0 220px 40px rgba(20,4,10,0.55);
+        background: radial-gradient(ellipse at 50% 42%, transparent 55%, rgba(20,4,12,0.35) 100%);
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-BR4X4rfg.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="vignette"></div>
+
+    <div id="titlecard" class="serif glass">
+      <div class="om">॥ शुभ विवाह ॥</div>
+      <h1>Vaibhav <span class="weds">weds</span> Tonakshi</h1>
+      <div class="rule"><span></span><b>&#10022;</b><span></span></div>
+      <div class="sub">A Royal Baraat</div>
+    </div>
+
+    <div id="hint" class="serif glass">
+      <span class="desktop-copy">Drag to orbit &middot; Scroll to zoom &middot; <b>W A S D</b> / arrows to fly &middot; Right-drag to pan</span>
+    </div>
+
+    <div id="interactionTip" class="serif glass" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">
+      <span class="tip-mark" aria-hidden="true">&#10022;</span>
+      <span id="interactionTipText"></span>
+    </div>
+
+    <div id="arrivalMoment" class="serif glass" role="status" aria-live="polite" aria-hidden="true">
+      <div class="eyebrow">The baraat has arrived</div>
+      <div class="arrival-title">Vaibhav &amp; Tonakshi</div>
+    </div>
+
+    <button id="soundBtn" class="glass" type="button" title="Play wedding music" aria-label="Play wedding music" aria-pressed="false">&#128263;</button>
+    <button id="followBtn" class="glass" type="button" aria-label="Resume following the baraat">Follow baraat</button>
+
+    <div id="loading" class="serif">
+      <div class="diya-ring"></div>
+      <div class="msg glass" id="loadingMessage">Lighting the diyas&hellip;</div>
+    </div>
+
+  </body>
+</html>
