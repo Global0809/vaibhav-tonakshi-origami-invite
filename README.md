@@ -24,17 +24,17 @@ Your stay will be lovingly hosted by us!
 ## Editing
 
 - `index.html`: invitation, photo album, story, venue, travel and RSVP.
-- `styles.css`: responsive white-and-pink identity and reduced-motion treatment.
+- `styles.css` and `photo-details.css`: the original glass invitation format, white-and-pink palette, responsive photographs and reduced-motion treatment.
 - `config.js`: four celebrations, inline attire hints and countdown.
-- `app.js`: event rendering, countdown, one-shot photo reveals and background music.
+- `app.js`: mandala seal and opening doors, scroll-linked photo dissolves, light pink petals, animated flourishes, event cards, countdown and background music.
 - `rsvp.js`: FormSubmit integration with an email fallback. The inbox owner must activate the service and verify actual email delivery. Automated tests use mocked submissions only.
 - `assets/photos/`: responsive WebP photographs. Original high-resolution files remain private and unchanged.
-- `assets/fonts/`: self-hosted Bodoni Moda and Manrope, with their SIL Open Font License files.
+- Typography retains the original Comic Neue invitation lettering, with Comic Sans and related platform fallbacks.
 
 The custom monogram and #Vclearedtheinterview signature accompany the couple’s photographs. Resort photography comes from [Nirvana’s official website](https://www.nirvanarishikesh.com/).
 
 ## Performance and publication
 
-No videos, scroll-frame sequences or 3D world ship in this photo edition. The hero is eager-loaded; other photographs are lazy-loaded. There is no continuous rendering loop or scroll-driven decoding. Music starts from a guest gesture and can be paused in the phone header.
+No videos, AI frame sequences or 3D world ship in this photo edition. The original animated format is preserved: two real portraits dissolve as the guest scrolls the sticky hero, and the rest of the photographs use the existing cinematic frames. Only the opening portrait gates entry; other images load lazily. Scroll updates change opacity and transforms without video decoding. Ambient petals are capped and stop when the page is hidden. Reduced-motion preferences are respected. Music starts from a guest gesture and can be paused using the bell.
 
 This edition has one dedicated repository: `Global0809/vaibhav-tonakshi-origami-invite`. GitHub Pages serves the root of `codex/publish`. Earlier client websites are separate and unchanged by this project. Private notes, tests, original photographs and archived runtime media are excluded from publication.
