@@ -38,16 +38,7 @@ button { font-family: inherit; cursor: pointer; }
   outline-offset: 3px;
 }
 
-/* Handmade-paper grain over everything — the single biggest "expensive" cue */
-body::after {
-  content: "";
-  position: fixed; inset: 0;
-  z-index: 66;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-  opacity: .05;
-  mix-blend-mode: multiply;
-}
+/* Keep the paper colour without a fixed full-screen noise/filter layer. */
 
 /* ── Gold foil text ───────────────────────────────────────── */
 .gold-foil {
@@ -183,9 +174,9 @@ body::after {
 
 /* ═══════════════ HERO ═══════════════ */
 #hero { position: relative; background: var(--ivory); }
-.hero-sticky {
-  position: sticky; top: 0;
-  height: calc(var(--vh) * 100);
+.hero-stage {
+  position: relative;
+  height: max(680px, calc(var(--vh) * 100));
   overflow: hidden;
   contain: paint;
   isolation: isolate;
@@ -197,7 +188,7 @@ body::after {
 }
 /* A static wash of golden light keeps the scene luminous without repainting
    a full-screen blended layer throughout the scroll. */
-.hero-sticky::after {
+.hero-stage::after {
   content: "";
   position: absolute; inset: -30%;
   pointer-events: none;
@@ -807,10 +798,11 @@ textarea.rf-input { resize: none; }
 #thread-lotus {
   position: absolute;
   right: -7px;
-  top: calc(var(--sp, 0) * 100% - 8px);
+  top: -8px;
+  transform: translateY(calc(var(--sp, 0) * var(--vh) * 100));
   font-size: 15px;
   font-style: normal;
-  filter: drop-shadow(0 0 5px rgba(243,179,202,.8));
+
 }
 
 /* ═══════════════ SOUND TOGGLE ═══════════════ */
@@ -866,7 +858,7 @@ textarea.rf-input { resize: none; }
    repainted layers competing with scrolling. */
 @media (pointer: coarse) {
   body::after { display: none; }
-  .hero-sticky::after {
+  .hero-stage::after {
     animation: none;
     mix-blend-mode: normal;
     opacity: .28;

@@ -4,7 +4,6 @@
 const CFG = window.WEDDING_CONFIG;
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const IS_TOUCH = matchMedia("(pointer: coarse)").matches;
-const DPR = Math.min(devicePixelRatio || 1, IS_TOUCH ? 1.5 : 2);
 const $ = s => document.querySelector(s);
 const clamp = (v,a,b) => Math.min(b,Math.max(a,v));
 let entered = false;
@@ -77,139 +76,63 @@ const audio = (() => {
  return {start, bell, chime: () => bell(864,.07,1.4)};
 })();
 
-/* ═══════════════ PETALS — ambient particle system ════════ */
+/* Small composited petals: no full-screen canvas or perpetual JS frame loop. */
 const petals = (() => {
-  const canvas = $("#petals"), c = canvas.getContext("2d");
-  let petalDpr = IS_TOUCH ? 1 : Math.min(DPR, 1.25);
-  const COLORS = [
-    ["#DE8BAB", "#B94B76"],   // rose maroon
-    ["#F6BFD4", "#D78DA9"],   // marigold
-    ["#FFF5F9", "#F0CBD9"],   // ivory
-  ];
-  /* Pre-render each petal once. Drawing sprites is considerably cheaper than
-     rebuilding a gradient and Bezier path for every particle on every frame. */
-  const SPRITES = COLORS.map(([c1, c2]) => {
-    const sprite = document.createElement("canvas");
-    sprite.width = 48; sprite.height = 64;
-    const sc = sprite.getContext("2d");
-    const gradient = sc.createLinearGradient(24, 2, 24, 62);
-    gradient.addColorStop(0, c1); gradient.addColorStop(1, c2);
-    sc.fillStyle = gradient;
-    sc.beginPath();
-    sc.moveTo(24, 2);
-    sc.quadraticCurveTo(46, 21, 24, 62);
-    sc.quadraticCurveTo(2, 21, 24, 2);
-    sc.fill();
-    return sprite;
-  });
-  let list = [], gust = 0, running = false, lowPerf = false, paintAcc = 0;
-
-  const resize = () => {
-    canvas.width = Math.round(innerWidth * petalDpr);
-    canvas.height = Math.round(innerHeight * petalDpr);
-  };
-
-  const spawn = (x, y, burst = false) => {
-    const sprite = (Math.random() * SPRITES.length) | 0;
-    list.push({
-      x: x ?? Math.random() * innerWidth,
-      y: y ?? -30,
-      s: 7 + Math.random() * 11,
-      vy: (burst ? 1.5 : 0.35) + Math.random() * 0.55,
-      vx: burst ? (Math.random() - 0.5) * 3 : 0,
-      ph: Math.random() * Math.PI * 2,
-      rot: Math.random() * Math.PI * 2,
-      vr: (Math.random() - 0.5) * 0.04,
-      sprite,
-      burst,
-      life: 1,
-      fade: burst ? 0.004 : 0,
-    });
-  };
-
-  const baseCount = () => (lowPerf ? 2 : IS_TOUCH ? 4 : 8);
-
-  const step = (dt) => {
-    if (!running) return;
-    paintAcc += dt;
-    const interval = 1 / (lowPerf ? 18 : IS_TOUCH ? 24 : 30);
-    if (paintAcc < interval) return;
-    dt = Math.min(paintAcc, 0.06);
-    paintAcc = 0;
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    const n = baseCount();
-    if (list.length < n && Math.random() < 0.1) spawn();
-    gust *= Math.pow(0.92, dt * 60);
-    for (let i = list.length - 1; i >= 0; i--) {
-      const p = list[i];
-      p.ph += dt * 1.6;
-      p.x += (Math.sin(p.ph) * 0.5 + p.vx) * dt * 60;
-      p.y += (p.vy + gust) * dt * 60;
-      p.rot += (p.vr + Math.sin(p.ph) * 0.008) * dt * 60;
-      p.vx *= Math.pow(0.97, dt * 60);
-      if (p.fade) p.life -= p.fade * dt * 600;
-      if (p.y > innerHeight + 40 || p.life <= 0) { list.splice(i, 1); continue; }
-      // draw petal
-      c.save();
-      c.translate(p.x * petalDpr, p.y * petalDpr);
-      c.rotate(p.rot);
-      c.scale(petalDpr, petalDpr);
-      c.globalAlpha = 0.78 * Math.max(p.life, 0);
-      c.drawImage(SPRITES[p.sprite], -p.s * 0.78, -p.s, p.s * 1.56, p.s * 2);
-      c.restore();
-    }
-  };
-
-  return {
-    resize, step,
-    start: () => { running = true; paintAcc = 1; gust = 0; },
-    addGust: (g) => { if (running) gust = clamp(gust + g, -2, 4); },
-    burst: (x, y, n = 12) => {
-      if (!running) return;
-      const cap = lowPerf ? 6 : IS_TOUCH ? 8 : 12;
-      for (let i = 0; i < Math.min(n, cap); i++) spawn(x + (Math.random() - 0.5) * 60, y + (Math.random() - 0.5) * 40, true);
-    },
-    setLowPerf: () => {
-      lowPerf = true;
-      if (petalDpr > 1) { petalDpr = 1; resize(); }
-      let ambient = 0, transient = 0;
-      list = list.filter((p) => p.burst ? transient++ < 6 : ambient++ < 2);
-    },
-  };
+ const layer = $("#petals");
+ let running = false;
+ const makePetal = className => {
+  const petal = document.createElement("i");
+  petal.className = className;
+  return petal;
+ };
+ return {
+  start() {
+   if (running || REDUCED) return;
+   running = true;
+   const count = IS_TOUCH ? 3 : 5;
+   for (let i = 0; i < count; i++) {
+    const petal = makePetal("ambient-petal");
+    petal.style.left = `${12 + i * 76 / Math.max(count - 1,1)}%`;
+    petal.style.setProperty("--drift", `${i % 2 ? -32 : 32}px`);
+    petal.style.setProperty("--duration", `${18 + i * 3}s`);
+    petal.style.setProperty("--delay", `${-i * 4}s`);
+    layer.appendChild(petal);
+   }
+  },
+  burst(x,y,n = 1) {
+   if (!running || REDUCED || document.hidden) return;
+   for (let i = 0; i < Math.min(n,2); i++) {
+    if (layer.querySelectorAll(".tap-petal").length >= 4) break;
+    const petal = makePetal("tap-petal");
+    petal.style.left = x + "px";
+    petal.style.top = y + "px";
+    petal.style.setProperty("--drift", `${i ? 32 : -24}px`);
+    petal.addEventListener("animationend", () => petal.remove(), {once:true});
+    layer.appendChild(petal);
+   }
+  }
+ };
 })();
 
-
-
-/* Two real portraits unfold along the original sticky-hero scroll journey.
-   Only opacity and transform change; no frame downloads or video seeking. */
-const hero = $("#hero"), shots = [...document.querySelectorAll(".hero-photo")];
+/* Scrolling only updates the narrow progress thread, never the portrait.
+   Geometry is cached on resize; there are no layout reads during scrolling. */
+const hero = $("#hero"), heroPhoto = $(".hero-photo");
 const thread = $("#thread");
-let heroStart = 0, heroRange = 1, pageRange = 1, scrollQueued = false;
+let pageRange = 1, scrollQueued = false;
 const measure = () => {
- heroStart = hero.getBoundingClientRect().top + scrollY;
- heroRange = Math.max(1,hero.offsetHeight-vh);
  pageRange = Math.max(1,document.documentElement.scrollHeight-vh);
  updateScroll();
 };
 function updateScroll() {
  scrollQueued = false;
  if (!entered) return;
- const p = REDUCED ? 0 : clamp((scrollY-heroStart)/heroRange,0,1);
- const mix = shots[1].complete && shots[1].naturalWidth ? clamp((p-.28)/.45,0,1) : 0;
- shots[0].style.opacity = String(1-mix);
- shots[1].style.opacity = String(mix);
- if (!REDUCED && scrollY < heroStart+hero.offsetHeight) {
-  shots[0].style.transform = `scale(${1.025+p*.035})`;
-  shots[1].style.transform = `scale(${1.055-p*.035})`;
- }
  thread.style.setProperty("--sp",clamp(scrollY/pageRange,0,1).toFixed(4));
 }
 window.addEventListener("scroll", () => {
- if (scrollQueued) return;
+ if (scrollQueued || !entered) return;
  scrollQueued = true;
  requestAnimationFrame(updateScroll);
 }, {passive:true});
-shots[1].addEventListener("load", updateScroll);
 let lastWidth = innerWidth, resizeTimer;
 addEventListener("resize", () => {
  if (IS_TOUCH && innerWidth === lastWidth) return;
@@ -217,7 +140,7 @@ addEventListener("resize", () => {
  clearTimeout(resizeTimer);
  resizeTimer = setTimeout(() => {
   vh = innerHeight; document.documentElement.style.setProperty("--vh",vh/100+"px");
-  petals.resize(); measure();
+  measure();
  },120);
 });
 if ("ResizeObserver" in window) new ResizeObserver(measure).observe(document.body);
@@ -391,24 +314,9 @@ const motionObserver = new IntersectionObserver(entries => {
   if (target === finale && isIntersecting) target.classList.add("shown");
  });
 },{threshold:.05});
-document.querySelectorAll("#finale,.photo-band,.photo-keepsakes").forEach(el => motionObserver.observe(el));
-let lastFrame = 0, frameId = 0, sampleTime = 0, sampleCount = 0;
-const ambient = time => {
- if (!entered || REDUCED || document.hidden) { frameId = 0; return; }
- const elapsed = lastFrame ? (time-lastFrame)/1000 : 1/60;
- lastFrame = time;
- petals.step(Math.min(elapsed,.06));
- sampleTime += elapsed; sampleCount++;
- if (sampleTime > 2) {
-  if (sampleCount/sampleTime < 35) petals.setLowPerf();
-  sampleTime = 0; sampleCount = 0;
- }
- frameId = requestAnimationFrame(ambient);
-};
+motionObserver.observe(finale);
 document.addEventListener("visibilitychange", () => {
  document.body.classList.toggle("page-paused",document.hidden);
- if (document.hidden) { cancelAnimationFrame(frameId); frameId = 0; }
- else if (entered && !REDUCED && !frameId) { lastFrame=0; frameId=requestAnimationFrame(ambient); }
 });
 
 /* Original mandala seal and opening doors; just the first photo is prepared. */
@@ -430,9 +338,10 @@ function openInvitation(playMusic) {
   $("#finale").inert = false;
   $("#sound-toggle").classList.remove("hidden");
   thread.classList.add("on");
+  hero.classList.add("portrait-ready");
   measure();
   if (!REDUCED) {
-   petals.resize(); petals.start(); lastFrame=0; frameId=requestAnimationFrame(ambient);
+   petals.start();
   }
   $("#hero-title")?.focus({preventScroll:true});
  }, REDUCED ? 0 : 1450);
@@ -446,7 +355,7 @@ function ready() {
  document.querySelectorAll("#petal-ring path").forEach(el => el.style.opacity = "1");
 }
 let readyTimer = setTimeout(ready,6000);
-Promise.resolve(shots[0].decode?.()).catch(() => {}).finally(() => { clearTimeout(readyTimer); ready(); });
+Promise.resolve(heroPhoto.decode?.()).catch(() => {}).finally(() => { clearTimeout(readyTimer); ready(); });
 seal.addEventListener("click",()=>openInvitation(true),{once:true});
 $("#loader-retry").addEventListener("click",()=>location.reload());
 if (REDUCED) openInvitation(false);

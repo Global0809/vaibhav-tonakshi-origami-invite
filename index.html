@@ -16,8 +16,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Devanagari:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261001-animated-photos">
-<link rel="stylesheet" href="photo-details.css?v=20261001-animated-photos">
+<link rel="stylesheet" href="styles.css?v=20261001-keepsake-hero">
+<link rel="stylesheet" href="photo-details.css?v=20261001-keepsake-hero">
 <noscript><style>#loader{display:none}body.is-loading{overflow:auto}.hero-copy-glass,.names .ltr,.event-card,#finale>*{opacity:1;transform:none}</style></noscript>
 </head>
 <body class="is-loading">
@@ -48,13 +48,13 @@
 </div>
 
 <!-- ═══════════════ AMBIENT PETALS ═══════════════ -->
-<canvas id="petals" aria-hidden="true"></canvas>
+<div id="petals" aria-hidden="true"></div>
 <main id="invitation-content">
 
-<!-- ═══════════════ HERO — THE UNFOLDING ═══════════════ -->
+<!-- ═══════════════ HERO — A PORTRAIT KEEPSAKE ═══════════════ -->
 <section id="hero">
-  <div class="hero-sticky">
-    <div class="hero-photos"><img class="hero-photo hero-photo-first" fetchpriority="high" src="assets/photos/hero-960.webp" srcset="assets/photos/hero-640.webp 640w, assets/photos/hero-960.webp 960w, assets/photos/hero-1440.webp 1440w" sizes="(min-width: 900px) 640px, 100vw" width="960" height="1440" alt="Tonakshi leaning into Vaibhav as he kisses her forehead"><img class="hero-photo hero-photo-second" loading="lazy" decoding="async" src="assets/photos/laughter-960.webp" srcset="assets/photos/laughter-640.webp 640w, assets/photos/laughter-960.webp 960w, assets/photos/laughter-1440.webp 1440w" sizes="(min-width: 900px) 640px, 100vw" width="960" height="1440" alt="Vaibhav and Tonakshi sharing a laugh in the evening sunlight"></div>
+  <div class="hero-stage">
+    <div class="hero-photos"><img class="hero-photo hero-photo-first" fetchpriority="high" src="assets/photos/hero-960.webp" srcset="assets/photos/hero-640.webp 640w, assets/photos/hero-960.webp 960w, assets/photos/hero-1440.webp 1440w" sizes="(min-width: 900px) 640px, 100vw" width="960" height="1440" alt="Tonakshi leaning into Vaibhav as he kisses her forehead"></div>
     <div class="vignette" aria-hidden="true"></div>
 
     <!-- Wide-screen editorial side notes — decorative and deliberately CSS-only -->
@@ -73,14 +73,14 @@
       <small>Rishikesh · Uttarakhand</small>
     </div>
 
-    <!-- Crown — a quiet, constant signature above the unfolding world -->
+    <!-- Crown — a quiet, constant signature above the portrait -->
     <div id="hero-crown" aria-hidden="true">
       <span class="crown-mono">V.T</span>
       <span class="crown-rule"></span>
       <span class="crown-chapter">#Vclearedtheinterview</span>
     </div>
 
-    <!-- One permanent message: the imagery moves, the invitation remains serene. -->
+    <!-- A single photo entrance; normal page scrolling from the first swipe. -->
     <div class="beat beat-static">
       <div class="hero-copy-glass">
         <p class="eyebrow">॥ शुभ विवाह ॥</p>
@@ -91,7 +91,7 @@
         </h1>
         <p class="hero-vow">Two souls · Seven vows · One forever</p>
         <p class="hero-client-date">25–26 November 2026 · Rishikesh</p>
-        <div class="scroll-hint" aria-hidden="true"><span>Scroll to witness their story</span><i class="chev"></i></div>
+        <a class="scroll-hint hero-discover" href="#welcome"><span>Discover our celebration</span><i class="chev" aria-hidden="true"></i></a>
       </div>
     </div>
   </div>
@@ -155,12 +155,12 @@
 
 
 <!-- Personal photographs in the original cinematic frames -->
-<figure class="film-band photo-band"><div class="film-inner"><img loading="lazy" decoding="async" src="assets/photos/together-960.webp" srcset="assets/photos/together-640.webp 640w, assets/photos/together-960.webp 960w, assets/photos/together-1440.webp 1440w" sizes="(min-width: 900px) 640px, 94vw" width="1440" height="960" alt="Vaibhav and Tonakshi holding hands in a sunlit meadow"><figcaption class="film-caption"><span class="film-eyebrow">Vaibhav &amp; Tonakshi</span><span class="film-line">Hand in hand, into forever</span></figcaption></div></figure>
+<figure class="film-band photo-band photo-band--clean"><div class="film-inner"><img loading="lazy" decoding="async" src="assets/photos/together-960.webp" srcset="assets/photos/together-640.webp 640w, assets/photos/together-960.webp 960w, assets/photos/together-1440.webp 1440w" sizes="(min-width: 900px) 640px, 94vw" width="1440" height="960" alt="Vaibhav and Tonakshi holding hands in a sunlit meadow"></div></figure>
 
 
 <!-- ═══════════════ VENUE ═══════════════ -->
 <!-- Personal photographs in the original cinematic frames -->
-<figure class="film-band photo-band"><div class="film-inner"><img loading="lazy" decoding="async" src="assets/photos/embrace-960.webp" srcset="assets/photos/embrace-640.webp 640w, assets/photos/embrace-960.webp 960w, assets/photos/embrace-1440.webp 1440w" sizes="(min-width: 900px) 640px, 94vw" width="1440" height="960" alt="Vaibhav and Tonakshi embracing among wildflowers and evergreen trees"><figcaption class="film-caption"><span class="film-eyebrow">Our little world</span><span class="film-line">Right where we belong</span></figcaption></div></figure>
+<figure class="film-band photo-band photo-band--clean"><div class="film-inner"><img loading="lazy" decoding="async" src="assets/photos/embrace-960.webp" srcset="assets/photos/embrace-640.webp 640w, assets/photos/embrace-960.webp 960w, assets/photos/embrace-1440.webp 1440w" sizes="(min-width: 900px) 640px, 94vw" width="1440" height="960" alt="Vaibhav and Tonakshi embracing among wildflowers and evergreen trees"></div></figure>
 
 <section id="venue">
     <header class="sec-head">
@@ -230,8 +230,8 @@
 
 <p class="visually-hidden" id="music-status" role="status" aria-live="polite"></p>
 <audio id="bgm" loop preload="none" src="assets/audio/bgm.m4a"></audio>
-<script src="config.js?v=20261001-animated-photos"></script>
-<script src="app.js?v=20261001-animated-photos"></script>
+<script src="config.js?v=20261001-keepsake-hero"></script>
+<script src="app.js?v=20261001-keepsake-hero"></script>
 <script src="rsvp.js?v=20260930" defer></script>
 </body>
 </html>
