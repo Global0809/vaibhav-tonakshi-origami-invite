@@ -24,3 +24,13 @@ Thumbs.db
 /assets/stills/varmala.webp
 /.env*
 /*.pem
+
+# Photo edition: preserve old runtime media locally, not in Pages.
+/client-details.css
+/world/
+/assets/decor/
+/assets/frames2/
+/assets/origami-hero/
+/assets/film/
+/assets/stills/
+/assets/photos/*-original.*
