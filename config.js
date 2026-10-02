@@ -3,7 +3,7 @@ window.WEDDING_CONFIG = {
   wedding: { dateISO: "2026-11-25T12:00:00+05:30", dateDisplay: "25–26 November 2026" },
   dressCodes: {
     pink: { theme: "Shades of Pink", colors: ["#f5c4ca", "#d88ca1", "#d44684"] },
-    glitter: { theme: "All That Glitters", colors: ["#e5c878", "#c9a24b", "#b3a6ac"] },
+    glitter: { theme: "All That Glitters", colorNames: "Black · Grey · Silver · Blue", colors: ["#222328", "#777b83", "#c5c9d1", "#557aaa"] },
     serene: { theme: "Soft & Serene", colors: ["#fff9e9", "#ecc9b1", "#bcc9aa"] }
   },
   events: [
@@ -12,6 +12,6 @@ window.WEDDING_CONFIG = {
     { id: "baraat", day: 2, name: "Baraat", time: "1:00 PM", timeISO: "2026-11-26T13:00:00+05:30", line: "Join the joyous procession and the groom’s grand arrival.", dressCode: "serene" },
     { id: "wedding-dinner", day: 2, name: "Wedding Dinner", time: "7:00 PM", timeISO: "2026-11-26T19:00:00+05:30", line: "Raise a toast to love, family and our new beginning." }
   ],
-  venue: { name: "Nirvana River Resort", address: "Rishikesh, Uttarakhand", mapsUrl: "https://share.google/W509T9xez5OkFm9Eq" },
+  venue: { name: "Nirvana River Resort", address: "Rishikesh, Uttarakhand", websiteUrl: "https://nirvanariverresort.com/", mapsUrl: "https://share.google/W509T9xez5OkFm9Eq" },
   rsvp: { email: "vaibhavbhatiab94@gmail.com", deadline: "20 October 2026" }
 };

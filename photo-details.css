@@ -41,7 +41,7 @@ input, textarea { caret-color: var(--maroon); }
 .dress-swatches { display: flex; gap: 5px; }
 .dress-swatches i { width: 19px; height: 35px; border-radius: 10px; border: 1px solid rgba(58,34,48,.18); background: var(--swatch); }
 .pink-swatches i:nth-child(1) { --swatch: #F5C4CA; }.pink-swatches i:nth-child(2) { --swatch: #D88CA1; }.pink-swatches i:nth-child(3) { --swatch: #D44684; }.pink-swatches i:nth-child(4) { --swatch: #98234F; }
-.gold-swatches i:nth-child(1) { --swatch: #E5C878; }.gold-swatches i:nth-child(2) { --swatch: #C9A24B; }.gold-swatches i:nth-child(3) { --swatch: #B3A6AC; }.gold-swatches i:nth-child(4) { --swatch: #855D3B; }
+.evening-swatches i:nth-child(1) { --swatch: #222328; }.evening-swatches i:nth-child(2) { --swatch: #777b83; }.evening-swatches i:nth-child(3) { --swatch: #c5c9d1; }.evening-swatches i:nth-child(4) { --swatch: #557aaa; }
 .soft-swatches i:nth-child(1) { --swatch: #FFF9E9; }.soft-swatches i:nth-child(2) { --swatch: #ECC9B1; }.soft-swatches i:nth-child(3) { --swatch: #BCC9AA; }.soft-swatches i:nth-child(4) { --swatch: #BDCDDE; }
 /* Small fabric-palette annotations: no additional assets or animation loop. */
 .has-attire .event-summary { position: relative; min-width: 0; }
@@ -55,6 +55,7 @@ input, textarea { caret-color: var(--maroon); }
 .event-attire dl { min-width: 0; }
 .event-attire dt { font-size: 13px; line-height: 1.35; color: #775464; }
 .event-attire dd { margin: 3px 0 0; font-size: 16px; line-height: 1.35; font-weight: 700; text-wrap: balance; }
+.event-attire .attire-colors { display: block; margin-top: 7px; font-size: 14px; line-height: 1.5; font-weight: 400; color: #694652; }
 .event-attire .attire-swatches { position: relative; display: block; flex: 0 0 58px; width: 58px; height: 40px; }
 .event-attire .attire-swatches i {
   position: absolute; bottom: 3px; left: 4px; width: 20px; height: 32px;
@@ -252,7 +253,7 @@ html { scrollbar-color: #dca0b7 #fff5f9; }
 .event-card::before { background: linear-gradient(#d68cac, #b44572); }
 .event-name { color: #a43261; }
 .venue-card { max-width: 640px; }
-img.venue-art { display: block; width: 100%; height: auto; aspect-ratio: 1920 / 710; object-fit: contain; }
+img.venue-art { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; }
 .venue-info h3 { font-size: clamp(24px, 5vw, 30px); }
 .btn-gold { color: #76223f; background: linear-gradient(120deg, #f4bdd2, #ffe7f0 50%, #f4bdd2); }
 .btn-maroon, .rf-chip input:checked + span { color: #fff; background: linear-gradient(145deg, #b33c6b, #86284d); }

@@ -188,8 +188,8 @@ document.addEventListener("visibilitychange", () => {
         <p class="event-meta"><b>${ev.day === 1 ? "Wednesday, 25 November 2026" : "Thursday, 26 November 2026"}</b> · ${ev.time}<br>${CFG.venue.name}</p>
       </div>
       ${attire ? `<div class="event-attire">
-        <span class="dress-swatches attire-swatches ${ev.dressCode === "pink" ? "pink-swatches" : ev.dressCode === "glitter" ? "gold-swatches" : "soft-swatches"}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <dl><dt>Dress code</dt><dd>${attire.theme}</dd></dl>
+        <span class="dress-swatches attire-swatches ${ev.dressCode === "pink" ? "pink-swatches" : ev.dressCode === "glitter" ? "evening-swatches" : "soft-swatches"}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <dl><dt>Dress code</dt><dd>${attire.theme}${attire.colorNames ? `<span class="attire-colors">${attire.colorNames}</span>` : ""}</dd></dl>
       </div>` : ""}`;
     wrap.appendChild(card);
   });
