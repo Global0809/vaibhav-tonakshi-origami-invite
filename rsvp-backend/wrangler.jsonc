@@ -12,6 +12,6 @@
     "database_id": "2aaedfd8-ae66-4e3a-9bf2-56efa7ef279e",
     "migrations_dir": "migrations"
   }],
-  "vars": { "ALLOWED_ORIGINS": "https://global0809.github.io,http://127.0.0.1:4192,http://localhost:4192" },
+  "vars": { "ALLOWED_ORIGINS": "https://global0809.github.io,https://tonakshivaibhav.com,https://www.tonakshivaibhav.com,http://127.0.0.1:4192,http://localhost:4192" },
   "observability": { "enabled": false }
 }
