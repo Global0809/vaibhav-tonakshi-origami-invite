@@ -13,5 +13,5 @@ window.WEDDING_CONFIG = {
     { id: "wedding-dinner", day: 2, name: "Wedding Dinner", time: "7:00 PM", timeISO: "2026-11-26T19:00:00+05:30", line: "Raise a toast to love, family and our new beginning." }
   ],
   venue: { name: "Nirvana River Resort", address: "Rishikesh, Uttarakhand", websiteUrl: "https://nirvanariverresort.com/", mapsUrl: "https://share.google/W509T9xez5OkFm9Eq" },
-  rsvp: { email: "vaibhavbhatiab94@gmail.com", deadline: "20 October 2026" }
+  rsvp: { endpoint: "https://vaibhav-tonakshi-rsvp.aicanfeel-studio-crm.workers.dev/api/rsvp", deadline: "20 October 2026" }
 };

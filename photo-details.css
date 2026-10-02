@@ -259,6 +259,7 @@ img.venue-art { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; 
 .btn-maroon, .rf-chip input:checked + span { color: #fff; background: linear-gradient(145deg, #b33c6b, #86284d); }
 .rf-input { background: #fffafd; }
 .rf-chip span { transition: color .25s, background-color .25s, border-color .25s, box-shadow .25s; }
+#rsvp .rf-chip input:checked + span { color: #fff; transition: border-color .25s, box-shadow .25s; }
 #sound-toggle { color: #922c55; background: rgba(255,245,250,.92); border-color: #dea1b9; box-shadow: 0 5px 18px rgba(129,36,71,.12); }
 #sound-toggle.muted { opacity: .8; filter: none; }
 #sound-toggle.muted::after { content: ""; position: absolute; width: 25px; height: 1px; background: currentColor; transform: rotate(-45deg); }

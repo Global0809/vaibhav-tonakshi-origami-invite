@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Guest list · Vaibhav & Tonakshi</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/admin.css" />
+    <script src="/admin.js" defer></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <a
+        class="brand"
+        href="/admin"
+        aria-label="Vaibhav and Tonakshi guest list"
+        ><span class="monogram">V&amp;T</span
+        ><span
+          >Vaibhav &amp; Tonakshi<small
+            >25–26 November 2026 · Rishikesh</small
+          ></span
+        ></a
+      ><span class="private-label">Private guest list</span>
+    </header>
+    <main>
+      <section
+        id="login-panel"
+        class="login-panel"
+        aria-labelledby="login-title"
+      >
+        <h1 id="login-title">Every reply,<br />in one place.</h1>
+        <p class="intro">
+          Sign in to see who’s joining the celebrations, their guest details and
+          notes.
+        </p>
+        <form id="login-form">
+          <label for="password">Dashboard password</label
+          ><input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            maxlength="200"
+          /><label class="show-password"
+            ><input type="checkbox" id="show-password" /> Show password</label
+          ><button type="submit" id="login-button">
+            Open guest list
+          </button>
+        </form>
+        <p id="login-status" role="status" aria-live="polite"></p>
+        <p class="privacy-note">
+          Guest details are private. Only people with your dashboard password
+          can view them.
+        </p>
+      </section>
+      <section id="dashboard" hidden aria-labelledby="dashboard-title">
+        <div class="heading-row">
+          <div>
+            <h1 id="dashboard-title" tabindex="-1">Your guest list</h1>
+            <p id="updated">Loading responses…</p>
+          </div>
+          <div class="actions">
+            <button id="refresh" class="secondary">Refresh</button
+            ><button id="export" disabled>Download CSV</button
+            ><button id="logout" class="quiet">Sign out</button>
+          </div>
+        </div>
+        <dl class="totals">
+          <div>
+            <dt>Responses</dt>
+            <dd id="total-responses">—</dd>
+          </div>
+          <div>
+            <dt>Attending guests</dt>
+            <dd id="total-guests">—</dd>
+            <small>Including additional guests</small>
+          </div>
+          <div>
+            <dt>Both days</dt>
+            <dd id="total-both">—</dd>
+            <small>Including additional guests</small>
+          </div>
+          <div>
+            <dt>Declined</dt>
+            <dd id="total-declined">—</dd>
+            <small>Responses</small>
+          </div>
+        </dl>
+        <div class="list-tools">
+          <label for="search"
+            >Find a guest<input
+              type="search"
+              id="search"
+              placeholder="Search name, phone or note" /></label
+          ><label for="filter"
+            >Attendance<select id="filter">
+              <option value="all">All responses</option>
+              <option value="accept">Attending</option>
+              <option value="decline">Declined</option>
+            </select></label
+          >
+          <p id="shown-count" aria-live="polite"></p>
+        </div>
+        <p id="dashboard-status" role="status" aria-live="polite"></p>
+        <div id="empty" class="empty" hidden>
+          <h2>No RSVPs yet</h2>
+          <p>
+            Once a guest submits the invitation form, their response will appear
+            here. Use Refresh to check for new replies.
+          </p>
+        </div>
+        <div id="no-results" class="empty" hidden>
+          <h2>No matching guests</h2>
+          <p>Try a different name or clear the attendance filter.</p>
+        </div>
+        <div
+          id="response-list"
+          class="response-list"
+          aria-label="RSVP responses"
+        ></div>
+        <p class="list-note">
+          Each card is one submitted response. Attending totals include the
+          guest and their additional guests. Repeat submissions from the same
+          person are listed separately—check them before planning final numbers.
+        </p>
+      </section>
+    </main>
+    <footer>
+      Vaibhav &amp; Tonakshi · RSVP desk<span
+        >Responses are saved here, not sent by email.</span
+      >
+    </footer>
+  </body>
+</html>

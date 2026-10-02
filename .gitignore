@@ -25,6 +25,13 @@ Thumbs.db
 /.env*
 /*.pem
 
+# Private RSVP runtime state and credentials must never be published.
+**/.wrangler/
+**/node_modules/
+**/.dev.vars*
+**/*credentials*
+**/*secrets.json
+
 # Photo edition: preserve old runtime media locally, not in Pages.
 /client-details.css
 /world/

@@ -1,0 +1,17 @@
+{
+  "name": "vaibhav-tonakshi-rsvp",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-02",
+  "account_id": "10fff49db7d7556004cc107f17180023",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true, "html_handling": "none" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "vaibhav-tonakshi-rsvps",
+    "database_id": "2aaedfd8-ae66-4e3a-9bf2-56efa7ef279e",
+    "migrations_dir": "migrations"
+  }],
+  "vars": { "ALLOWED_ORIGINS": "https://global0809.github.io,http://127.0.0.1:4192,http://localhost:4192" },
+  "observability": { "enabled": false }
+}

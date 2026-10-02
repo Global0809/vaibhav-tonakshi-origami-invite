@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Devanagari:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=20261002-client-notes">
-<link rel="stylesheet" href="photo-details.css?v=20261002-client-notes">
+<link rel="stylesheet" href="photo-details.css?v=20261002-rsvp">
 <noscript><style>#loader{display:none}body.is-loading{overflow:auto}.hero-copy-glass,.names .ltr,.event-card,#finale>*{opacity:1;transform:none}</style></noscript>
 </head>
 <body class="is-loading">
@@ -193,7 +193,7 @@
   <div class="rsvp-surface">
     <form id="rsvp-form">
       <label class="rf-label" for="guest-name">Full name<input class="rf-input" id="guest-name" name="full_name" autocomplete="name" maxlength="100" required></label>
-      <div class="rsvp-field-pair"><label class="rf-label" for="guest-email">Email address<input class="rf-input" id="guest-email" type="email" name="email" autocomplete="email" maxlength="160" required></label><label class="rf-label" for="guest-phone">Phone number<input class="rf-input" id="guest-phone" type="tel" name="phone" autocomplete="tel" maxlength="30" required></label></div>
+      <label class="rf-label" for="guest-phone">Phone number<input class="rf-input" id="guest-phone" type="tel" name="phone" autocomplete="tel" minlength="7" maxlength="30" required></label>
       <fieldset class="rsvp-choice-field"><legend>Will you be attending?</legend><div class="rf-choices"><label class="rf-chip"><input type="radio" name="attendance" value="Joyfully accepting" required><span>Joyfully accepting</span></label><label class="rf-chip"><input type="radio" name="attendance" value="Regretfully declining" required><span>Regretfully declining</span></label></div></fieldset>
       <div id="attending-details" hidden>
         <div class="rsvp-field-pair"><label class="rf-label" for="guest-days">How many days will you attend?<select class="rf-input" id="guest-days" name="days" required disabled><option value="">Please choose</option><option value="One day">One day</option><option value="Both days">Both days · 25 &amp; 26 November</option></select></label><label class="rf-label" for="guest-count">Plus-one / additional guests<select class="rf-input" id="guest-count" name="additional_guests" disabled><option value="0">Just me</option><option value="1">1 additional guest</option><option value="2">2 additional guests</option><option value="3">3 additional guests</option><option value="4">4 additional guests</option><option value="5">5 additional guests</option><option value="6">6 additional guests</option><option value="7">7 additional guests</option><option value="8">8 additional guests</option></select></label></div>
@@ -201,13 +201,12 @@
         <label class="rf-label" for="guest-notes">A note for us <span class="rf-opt">(optional — if joining for one day, let us know which)</span><textarea class="rf-input" id="guest-notes" name="notes" rows="3" maxlength="1000" disabled></textarea></label>
       </div>
       <div class="rsvp-honeypot" aria-hidden="true"><label>Leave this empty<input name="_honey" tabindex="-1" autocomplete="off"></label></div>
-      <p class="rsvp-privacy">Your response is sent to Vaibhav &amp; Tonakshi via FormSubmit to help plan the celebrations. <a href="https://formsubmit.co/privacy.pdf" target="_blank" rel="noopener">Privacy information</a></p>
+      <p class="rsvp-privacy">Your details are saved privately for Vaibhav &amp; Tonakshi to plan the celebrations. No email app is needed.</p>
       <button id="rsvp-submit" class="btn-maroon" type="submit">Send my RSVP</button>
     </form>
     <p id="rsvp-status" role="status" aria-live="polite" aria-atomic="true"></p>
     <div id="rsvp-confirmation" hidden><h3 data-rsvp-title>Thank you for your RSVP!</h3><p data-rsvp-message>We are so excited to celebrate with you and look forward to creating beautiful memories together.</p><p data-rsvp-receipt></p></div>
-    <p class="rsvp-email">Prefer email? <a href="mailto:vaibhavbhatiab94@gmail.com?subject=Wedding%20RSVP%20%E2%80%94%20Vaibhav%20%26%20Tonakshi&amp;body=Name%3A%0AAttending%3A%0ADays%3A%0AAdditional%20guests%3A%0APhone%3A">Email your RSVP</a></p>
-    <noscript><p>Please use the email link to send your name, phone number, attendance, number of days and additional guest details.</p></noscript>
+    <noscript><p>Please enable JavaScript to submit your RSVP securely, or contact the couple directly.</p></noscript>
   </div>
 </section>
 
@@ -229,8 +228,8 @@
 
 <p class="visually-hidden" id="music-status" role="status" aria-live="polite"></p>
 <audio id="bgm" loop preload="none" src="assets/audio/a-thousand-years.m4a"></audio>
-<script src="config.js?v=20261002-client-notes"></script>
+<script src="config.js?v=20261002-rsvp"></script>
 <script src="app.js?v=20261002-client-notes"></script>
-<script src="rsvp.js?v=20260930" defer></script>
+<script src="rsvp.js?v=20261002-rsvp" defer></script>
 </body>
 </html>

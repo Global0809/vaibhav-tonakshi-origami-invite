@@ -14,9 +14,11 @@
 
     const attendingDetails = document.querySelector('#attending-details');
     const guestNames = document.querySelector('#additional-guest-names');
-    const endpoint = 'https://formsubmit.co/ajax/vaibhavbhatiab94@gmail.com';
+    const endpoint = window.WEDDING_CONFIG?.rsvp?.endpoint;
     const originalLabel = button.innerHTML;
     let submitting = false;
+    let lastPayload = '';
+    let submissionId = '';
 
     const field = name => form.elements.namedItem(name);
     const value = name => String(field(name)?.value || '').trim();
@@ -60,6 +62,12 @@
         nameField.setCustomValidity(value('full_name') ? '' : 'Please enter your name.');
       }
       if (!form.reportValidity()) return;
+      const phone = value('phone');
+      if (!/^[+\d\s().-]+$/.test(phone) || phone.replace(/\D/g, '').length < 7 || phone.replace(/\D/g, '').length > 15) {
+        field('phone').setCustomValidity('Please enter a valid phone number, including your country code if needed.');
+        form.reportValidity();
+        return;
+      }
       const attendance = value('attendance');
       if (!['Joyfully accepting', 'Regretfully declining'].includes(attendance)) {
         setStatus('Please tell us whether you will be joining the celebrations.', 'error');
@@ -77,24 +85,32 @@
         return;
       }
       if (value('_honey')) {
-        setStatus('We could not submit this response. Please use the email link below.', 'error');
+        setStatus('We could not submit this response. Please refresh and try again.', 'error');
+        return;
+      }
+
+      if (!endpoint) {
+        setStatus('Online RSVP is temporarily unavailable. Please try again shortly.', 'error');
         return;
       }
 
       const payload = {
         full_name: value('full_name'),
-        email: value('email'),
         phone: value('phone'),
         attendance,
         days: attending ? value('days') : 'Not attending',
         additional_guests: extraGuests,
         guest_names: attending && extraGuests > 0 ? value('guest_names') : '',
         notes: attending ? value('notes') : '',
-        _subject: 'Wedding RSVP — Vaibhav & Tonakshi · 25–26 November 2026',
-        _template: 'table',
-        _captcha: 'false',
         _honey: ''
       };
+      // Reuse the receipt key for an unchanged retry, including after a network timeout.
+      const serialized = JSON.stringify(payload);
+      if (serialized !== lastPayload) {
+        submissionId = crypto.randomUUID();
+        lastPayload = serialized;
+      }
+      payload.submission_id = submissionId;
 
       submitting = true;
       button.disabled = true;
@@ -113,11 +129,13 @@
           credentials: 'omit',
           referrerPolicy: 'strict-origin-when-cross-origin'
         });
-        if (!response.ok) throw new Error('service-unavailable');
         const result = await response.json();
-        const activationRequired = /needs? (?:to be )?activat|requires? activation|please activate|activate (?:this|your|the) form|form (?:is )?not activated/i.test(String(result.message || ''));
-        if (activationRequired) throw new Error('activation-required');
-        if (result.success !== true && result.success !== 'true') {
+        if (!response.ok) {
+          const error = new Error('service-unavailable');
+          if (response.status >= 400 && response.status < 500) error.formMessage = result.error;
+          throw error;
+        }
+        if (result.success !== true || result.receipt !== submissionId) {
           throw new Error('not-confirmed');
         }
 
@@ -143,8 +161,8 @@
         message.textContent = attending
           ? 'Thank you for your RSVP! We are so excited to celebrate with you and look forward to creating beautiful memories together.'
           : 'You will be missed at the celebrations. Thank you for being part of our story — we send you our love.';
-        receipt.textContent = 'Your response has been accepted by our RSVP service.';
-        setStatus('Response accepted by the RSVP service.', 'success');
+        receipt.textContent = 'Your RSVP has been saved for Vaibhav & Tonakshi. Reference: ' + result.receipt.slice(0, 8).toUpperCase();
+        setStatus('Your RSVP has been saved successfully.', 'success');
         form.hidden = true;
         confirmation.hidden = false;
         confirmation.setAttribute('tabindex', '-1');
@@ -152,11 +170,11 @@
         confirmation.scrollIntoView({ behavior: 'auto', block: 'nearest' });
       } catch (error) {
         if (error.name === 'AbortError') {
-          setStatus('The connection took too long, so we couldn’t confirm your RSVP. Your details are still here. Please retry or use the email link below.', 'error');
-        } else if (error.message === 'activation-required') {
-          setStatus('Online RSVP is still being activated. Please use the email link below to send your attendance details to us.', 'error');
+          setStatus('The connection took too long, so we couldn’t confirm your RSVP. Your details are still here. Please try again — retrying won’t duplicate this response.', 'error');
+        } else if (typeof error.formMessage === 'string') {
+          setStatus(error.formMessage, 'error');
         } else {
-          setStatus('We couldn’t confirm your RSVP. Your details are still here — please try again or use the email link below.', 'error');
+          setStatus('We couldn’t confirm your RSVP. Your details are still here — please check your connection and try again.', 'error');
         }
       } finally {
         window.clearTimeout(timeout);
